@@ -11,14 +11,7 @@ namespace ShoppingMate.Core.DTO.Abstract
     public abstract class BaseDto
     {
         public int Id { get; set; }
-
-
-        [Display(Name = "Created At")]
         public DateTime CreateDate { get; set; }
-
-
-        [MaxLength(500)]
-        [Display(Name = "Created By")]
-        public string CreatedBy { get; set; }
+        public string? CreatedBy { get; set; }
     }
 }
