@@ -13,13 +13,13 @@ namespace ShoppingMate.Data.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly AppDbContext dbContext;
+        private readonly ApplicationDbContext dbContext;
         public bool disposed;
 
         public IGenericRepository<Category> CategoryRepository { get; private set; }
         public IGenericRepository<Product> ProductRepository { get; private set; }
 
-        public UnitOfWork(AppDbContext dbContext)
+        public UnitOfWork(ApplicationDbContext dbContext)
         {
             this.dbContext = dbContext;
 

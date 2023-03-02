@@ -12,10 +12,10 @@ namespace ShoppingMate.Data.Repository
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-        protected readonly AppDbContext _context;
+        protected readonly ApplicationDbContext _context;
         private readonly DbSet<T> _entities;
 
-        public GenericRepository(AppDbContext dbContext)
+        public GenericRepository(ApplicationDbContext dbContext)
         {
             _context = dbContext;
             _entities = _context.Set<T>();
