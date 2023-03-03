@@ -2,7 +2,7 @@
 using ShoppingMate.Core.Model.Concrete;
 using ShoppingMate.Core.UnitOfWork;
 using ShoppingMate.Data.UnitOfWork;
-using ShoppingMate.Service.Service.Abstract;
+using ShoppingMate.Core.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,9 +51,9 @@ namespace ShoppingMate.Service.Service.Concrete
             return itemList;
         }
 
-        public Task<Product> GetByIdAsync(int id)
+        public Task<Product> GetByIdAsync(Expression<Func<Product, bool>> expression)
         {
-            var item = _unitOfWork.ProductRepository.GetByIdAsync(id);
+            var item = _unitOfWork.ProductRepository.GetByIdAsync(expression);
 
             return item;
         }

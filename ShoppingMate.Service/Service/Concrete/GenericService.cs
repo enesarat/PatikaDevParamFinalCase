@@ -45,14 +45,15 @@ namespace ShoppingMate.Service.Service.Concrete
             return await _repository.GetAllAsync();
         }
 
-        public async Task<T> GetByIdAsync(int id)
+        public async Task<T> GetByIdAsync(Expression<Func<T, bool>> expression)
         {
-            return await _repository.GetByIdAsync(id);
+            return await _repository.GetByIdAsync(expression);
         }
 
-        public Task UpdateAsync(T item)
+        public async Task UpdateAsync(T item)
         {
-            throw new NotImplementedException();
+            _repository.Update(item);
+            await _unitOfWork.CommitAsync();
         }
 
         public IQueryable<T> Where(Expression<Func<T, bool>> expression)

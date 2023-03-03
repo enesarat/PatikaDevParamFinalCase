@@ -13,10 +13,13 @@ namespace ShoppingMate.Service.Mapper
     {
         public MappingProfile()
         {
-            CreateMap<Category,CategoryDto>().ReverseMap();
-            CreateMap<Product,ProductDto>().ReverseMap();
-            CreateMap<Item,ItemDto>().ReverseMap();
-            CreateMap<ShoppingList,ShoppingListDto>().ReverseMap();
+            CreateMap<Category, CategoryDto>().ReverseMap();
+            CreateMap<Product, ProductDto>().ReverseMap();
+            CreateMap<ProductUpdateDto, Product>();
+            CreateMap<ProductCreateDto, Product>();
+            CreateMap<Product, ProductWithCategoryDto>();
+            CreateMap<Item, ItemDto>().ReverseMap();
+            CreateMap<ShoppingList, ShoppingListDto>().ReverseMap();
         }
     }
 }
