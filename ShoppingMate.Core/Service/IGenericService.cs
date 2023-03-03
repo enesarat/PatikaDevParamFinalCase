@@ -10,11 +10,11 @@ namespace ShoppingMate.Core.Service
     public interface IGenericService<T> where T : class
     {
         Task<T> GetByIdAsync(int id);
-        Task<IEnumerable<T>> GetAllAsync();
+        Task<IEnumerable<T>> GetAll();
         IQueryable<T> Where(Expression<Func<T, bool>> expression);
         Task<bool> AnyAsync(Expression<Func<T, bool>> expression);
-        Task AddAsync(T item);
+        Task<T> AddAsync(T item);
         Task UpdateAsync(T item);
-        Task DeleteAsync(int id);
+        Task DeleteAsync(T item);
     }
 }
