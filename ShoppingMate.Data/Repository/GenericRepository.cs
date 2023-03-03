@@ -43,9 +43,9 @@ namespace ShoppingMate.Data.Repository
             }
         }
 
-        public IQueryable<T> GetAll()
+        public async Task<IEnumerable<T>> GetAllAsync()
         {
-            return _entities.AsNoTracking().AsQueryable();
+            return await _entities.AsNoTracking().ToListAsync();
         }
 
         public async Task<T> GetByIdAsync(int id)

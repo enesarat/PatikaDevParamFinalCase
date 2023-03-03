@@ -9,7 +9,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ShoppingMate.Service.Service
+namespace ShoppingMate.Service.Service.Concrete
 {
     public class GenericService<T> : IGenericService<T> where T : class
     {
@@ -40,9 +40,9 @@ namespace ShoppingMate.Service.Service
             await _unitOfWork.CommitAsync();
         }
 
-        public async Task<IEnumerable<T>> GetAll()
+        public async Task<IEnumerable<T>> GetAllAsync()
         {
-            return await _repository.GetAll().ToListAsync();
+            return await _repository.GetAllAsync();
         }
 
         public async Task<T> GetByIdAsync(int id)

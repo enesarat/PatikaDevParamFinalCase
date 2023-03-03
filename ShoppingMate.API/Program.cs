@@ -6,7 +6,8 @@ using ShoppingMate.Data.Context;
 using ShoppingMate.Data.Repository;
 using ShoppingMate.Data.UnitOfWork;
 using ShoppingMate.Service.Mapper;
-using ShoppingMate.Service.Service;
+using ShoppingMate.Service.Service.Abstract;
+using ShoppingMate.Service.Service.Concrete;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +22,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
 builder.Services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
 builder.Services.AddScoped(typeof(IGenericService<>), typeof(GenericService<>));
+builder.Services.AddScoped<IProductService,ProductService>();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddDbContext<ApplicationDbContext>(x =>
