@@ -1,9 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using ShoppingMate.Core.Repository;
+using ShoppingMate.Core.Service;
 using ShoppingMate.Core.UnitOfWork;
 using ShoppingMate.Data.Context;
 using ShoppingMate.Data.Repository;
 using ShoppingMate.Data.UnitOfWork;
+using ShoppingMate.Service.Mapper;
+using ShoppingMate.Service.Service;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +20,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
 builder.Services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
+builder.Services.AddScoped(typeof(IGenericService<>), typeof(GenericService<>));
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 builder.Services.AddDbContext<ApplicationDbContext>(x =>
 {
