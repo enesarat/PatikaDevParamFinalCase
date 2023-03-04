@@ -10,10 +10,10 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using ShoppingMate.Core.Repository;
-using ShoppingMate.Core.DTO.Concrete;
 using AutoMapper;
 using ShoppingMate.Core.DTO;
 using Microsoft.AspNetCore.Http;
+using ShoppingMate.Core.DTO.Concrete.Product;
 
 namespace ShoppingMate.Service.Service.Concrete
 {

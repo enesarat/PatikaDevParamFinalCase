@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -50,23 +51,26 @@ namespace ShoppingMate.Service.Service.Concrete
         public async Task<CustomResponse<NoContentResponse>> DeleteAsync(int id)
         {
 
-            var entity = await _repository.GetByIdAsync(x => x.Id == id && x.IsActive == true);
+            var entity = await _repository.GetByIdAsync(id);
             _repository.Delete(entity);
             await _unitOfWork.CommitAsync();
 
             return CustomResponse<NoContentResponse>.Success(StatusCodes.Status200OK);
         }
 
-        public async Task<CustomResponse<IEnumerable<Dto>>> GetAllAsync(Expression<Func<Entity, bool>> expression)
+        public async Task<CustomResponse<IEnumerable<Dto>>> GetAllAsync()
         {
-            var entities = await _repository.GetAllAsync(expression);
-            var dtos = _mapper.Map<IEnumerable<Dto>>(entities);
+            var entities = await _repository.GetAllAsync();
+            var entitiesQueryable = entities.ToList().AsQueryable();
+            var activeEntities = entitiesQueryable.Where(x=>x.IsActive==true);
+
+            var dtos = _mapper.Map<IEnumerable<Dto>>(activeEntities);
             return CustomResponse<IEnumerable<Dto>>.Success(StatusCodes.Status200OK, dtos);
         }
 
-        public async Task<CustomResponse<Dto>> GetByIdAsync(Expression<Func<Entity, bool>> expression)
+        public async Task<CustomResponse<Dto>> GetByIdAsync(int id)
         {
-            var entity = await _repository.GetByIdAsync(expression);
+            var entity = await _repository.GetByIdAsync(id);
             var dto = _mapper.Map<Dto>(entity);
 
             return CustomResponse<Dto>.Success(StatusCodes.Status200OK, dto);

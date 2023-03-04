@@ -1,5 +1,5 @@
 ﻿using ShoppingMate.Core.DTO;
-using ShoppingMate.Core.DTO.Concrete;
+using ShoppingMate.Core.DTO.Concrete.Product;
 using ShoppingMate.Core.Model.Concrete;
 using ShoppingMate.Core.Service;
 using System;

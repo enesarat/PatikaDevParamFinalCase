@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using ShoppingMate.Core.DTO.Concrete;
+using ShoppingMate.Core.DTO.Concrete.Product;
 using System;
 using System.Collections.Generic;
 using System.Linq;

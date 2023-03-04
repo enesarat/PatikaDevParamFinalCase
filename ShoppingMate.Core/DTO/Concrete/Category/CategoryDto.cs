@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ShoppingMate.Core.DTO.Concrete
+namespace ShoppingMate.Core.DTO.Concrete.Category
 {
     public class CategoryDto : BaseDto
     {

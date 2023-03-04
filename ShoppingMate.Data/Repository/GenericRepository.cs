@@ -43,14 +43,14 @@ namespace ShoppingMate.Data.Repository
             }
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> expression)
+        public async Task<IEnumerable<T>> GetAllAsync()
         {
-            return await _entities.Where(expression).AsNoTracking().ToListAsync();
+            return await _entities.AsNoTracking().ToListAsync();
         }
 
-        public async Task<T> GetByIdAsync(Expression<Func<T, bool>> expression)
+        public async Task<T> GetByIdAsync(int id)
         {
-            return await _entities.Where(expression).FirstOrDefaultAsync();
+            return await _entities.FindAsync(id);
         }
 
         public void Update(T entity)

@@ -11,8 +11,8 @@ namespace ShoppingMate.Core.Service
 {
     public interface IGenericService<Entity, Dto> where Entity : BaseModel where Dto : class
     {
-        Task<CustomResponse<Dto>> GetByIdAsync(Expression<Func<Entity, bool>> expression);
-        Task<CustomResponse<IEnumerable<Dto>>> GetAllAsync(Expression<Func<Entity, bool>> expression);
+        Task<CustomResponse<Dto>> GetByIdAsync(int id);
+        Task<CustomResponse<IEnumerable<Dto>>> GetAllAsync();
         Task<CustomResponse<IEnumerable<Dto>>> Where(Expression<Func<Entity, bool>> expression);
         Task<CustomResponse<bool>> AnyAsync(Expression<Func<Entity, bool>> expression);
         Task<CustomResponse<Dto>> AddAsync(Dto item);

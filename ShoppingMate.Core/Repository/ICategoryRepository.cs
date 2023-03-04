@@ -5,10 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ShoppingMate.Core.DTO.Concrete
+namespace ShoppingMate.Core.Repository
 {
-    public class ProductWithCategoryDto : ProductDto
+    public interface ICategoryRepository : IGenericRepository<Category>
     {
-        public Category Category { get; set; }
     }
 }

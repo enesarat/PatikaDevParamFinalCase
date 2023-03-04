@@ -1,12 +1,13 @@
-﻿using System;
+﻿using ShoppingMate.Core.DTO.Abstract;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ShoppingMate.Core.DTO.Concrete
+namespace ShoppingMate.Core.DTO.Concrete.Product
 {
-    public class ProductCreateDto
+    public class ProductDto : BaseDto
     {
         public string Name { get; set; }
         public int Stock { get; set; }
