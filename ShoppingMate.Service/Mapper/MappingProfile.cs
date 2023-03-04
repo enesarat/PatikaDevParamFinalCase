@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using ShoppingMate.Core.DTO.Concrete;
 using ShoppingMate.Core.DTO.Concrete.Category;
+using ShoppingMate.Core.DTO.Concrete.Item;
 using ShoppingMate.Core.DTO.Concrete.Product;
 using ShoppingMate.Core.Model.Concrete;
 using System;
@@ -23,7 +24,11 @@ namespace ShoppingMate.Service.Mapper
             CreateMap<ProductUpdateDto, Product>();
             CreateMap<ProductCreateDto, Product>();
             CreateMap<Product, ProductsWithCategoryDto>();
-           
+
+            CreateMap<Item, ItemDto>().ReverseMap();
+            CreateMap<ItemCreateDto, Item>();
+            CreateMap<ItemUpdateDto, Item>();
+
             CreateMap<Item, ItemDto>().ReverseMap();
             CreateMap<ShoppingList, ShoppingListDto>().ReverseMap();
         }

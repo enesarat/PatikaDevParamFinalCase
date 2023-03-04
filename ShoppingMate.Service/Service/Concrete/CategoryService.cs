@@ -20,9 +20,9 @@ namespace ShoppingMate.Service.Service.Concrete
     {
         private readonly ICategoryRepository _categoryRepository;
 
-        public CategoryService(IGenericRepository<Category> repository, IUnitOfWork unitOfWork, IMapper mapper, ICategoryRepository pcategoryRepository) : base(repository, unitOfWork, mapper)
+        public CategoryService(IGenericRepository<Category> repository, IUnitOfWork unitOfWork, IMapper mapper, ICategoryRepository categoryRepository) : base(repository, unitOfWork, mapper)
         {
-            _categoryRepository = pcategoryRepository;
+            _categoryRepository = categoryRepository;
         }
 
         public async Task<CustomResponse<CategoryDto>> AddAsync(CategoryCreateDto dto)
@@ -40,13 +40,12 @@ namespace ShoppingMate.Service.Service.Concrete
         {
             var entity = _mapper.Map<Category>(dto);
             entity.Id = id;
-            if (await _categoryRepository.AnyAsync(x => x.Id == id && x.IsActive == true))
-            {
-                _categoryRepository.Update(entity);
-                await _unitOfWork.CommitAsync();
-                return CustomResponse<NoContentResponse>.Success(StatusCodes.Status200OK);
-            }
-            return CustomResponse<NoContentResponse>.Fail(StatusCodes.Status404NotFound, $" {typeof(Category)} ({id}) not found. Updete operation is not successfull. ");
+
+            _categoryRepository.Update(entity);
+            await _unitOfWork.CommitAsync();
+
+            return CustomResponse<NoContentResponse>.Success(StatusCodes.Status200OK);
+            
         }
     }
 }

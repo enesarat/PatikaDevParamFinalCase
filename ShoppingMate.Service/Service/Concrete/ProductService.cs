@@ -40,13 +40,11 @@ namespace ShoppingMate.Service.Service.Concrete
         {
             var entity = _mapper.Map<Product>(dto);
             entity.Id = id;
-            if (await _productRepository.AnyAsync(x => x.Id == id && x.IsActive == true))
-            {
-                _productRepository.Update(entity);
-                await _unitOfWork.CommitAsync();
-                return CustomResponse<NoContentResponse>.Success(StatusCodes.Status200OK);
-            }
-            return CustomResponse<NoContentResponse>.Fail(StatusCodes.Status404NotFound, $" {typeof(Product)} ({id}) not found. Updete operation is not successfull. ");
+
+            _productRepository.Update(entity);
+            await _unitOfWork.CommitAsync();
+
+            return CustomResponse<NoContentResponse>.Success(StatusCodes.Status200OK);
         }
     }
 }
