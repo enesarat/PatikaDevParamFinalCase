@@ -3,15 +3,16 @@ using Microsoft.AspNetCore.Mvc;
 using ShoppingMate.Core.DTO;
 using ShoppingMate.Core.Service;
 using ShoppingMate.Core.Model.Abstract;
+using ShoppingMate.Core.Repository;
 
 namespace ShoppingMate.API.Filters
 {
-    public class NotFoundFilter<T> : IAsyncActionFilter where T : BaseModel
+    public class NotFoundFilter<T,Dto> : IAsyncActionFilter where T : BaseModel where Dto: class
     {
 
-        private readonly IGenericService<T> _service;
+        private readonly IGenericRepository<T> _service;
 
-        public NotFoundFilter(IGenericService<T> service)
+        public NotFoundFilter(IGenericRepository<T> service)
         {
             _service = service;
         }

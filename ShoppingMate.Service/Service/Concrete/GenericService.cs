@@ -1,4 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using ShoppingMate.Core.DTO;
+using ShoppingMate.Core.Model.Abstract;
+using ShoppingMate.Core.Model.Concrete;
 using ShoppingMate.Core.Repository;
 using ShoppingMate.Core.Service;
 using ShoppingMate.Core.UnitOfWork;
@@ -11,54 +16,80 @@ using System.Threading.Tasks;
 
 namespace ShoppingMate.Service.Service.Concrete
 {
-    public class GenericService<T> : IGenericService<T> where T : class
+    public class GenericService<Entity, Dto> : IGenericService<Entity, Dto> where Entity : BaseModel where Dto : class
     {
-        private readonly IGenericRepository<T> _repository;
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IGenericRepository<Entity> _repository;
+        protected readonly IUnitOfWork _unitOfWork;
+        protected readonly IMapper _mapper;
 
-        public GenericService(IGenericRepository<T> repository, IUnitOfWork unitOfWork)
+        public GenericService(IGenericRepository<Entity> repository, IUnitOfWork unitOfWork, IMapper mapper)
         {
             _repository = repository;
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public async Task<T> AddAsync(T item)
+        public async Task<CustomResponse<Dto>> AddAsync(Dto item)
         {
-            await _repository.AddAsync(item);
+            Entity newEntity = _mapper.Map<Entity>(item);
+
+            await _repository.AddAsync(newEntity);
             await _unitOfWork.CommitAsync();
-            return item;
+
+            var newDto = _mapper.Map<Dto>(newEntity);
+            return CustomResponse<Dto>.Success(StatusCodes.Status200OK, newDto);
         }
 
-        public async Task<bool> AnyAsync(Expression<Func<T, bool>> expression)
+        public async Task<CustomResponse<bool>> AnyAsync(Expression<Func<Entity, bool>> expression)
         {
-            return await _repository.AnyAsync(expression);
+            var anyEntity = await _repository.AnyAsync(expression);
+
+            return CustomResponse<bool>.Success(StatusCodes.Status200OK, anyEntity);
         }
 
-        public async Task DeleteAsync(T item)
+        public async Task<CustomResponse<NoContentResponse>> DeleteAsync(int id)
         {
-            _repository.Delete(item);
+
+            var entity = await _repository.GetByIdAsync(x => x.Id == id && x.IsActive == true);
+            _repository.Delete(entity);
             await _unitOfWork.CommitAsync();
+
+            return CustomResponse<NoContentResponse>.Success(StatusCodes.Status200OK);
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync()
+        public async Task<CustomResponse<IEnumerable<Dto>>> GetAllAsync(Expression<Func<Entity, bool>> expression)
         {
-            return await _repository.GetAllAsync();
+            var entities = await _repository.GetAllAsync(expression);
+            var dtos = _mapper.Map<IEnumerable<Dto>>(entities);
+            return CustomResponse<IEnumerable<Dto>>.Success(StatusCodes.Status200OK, dtos);
         }
 
-        public async Task<T> GetByIdAsync(Expression<Func<T, bool>> expression)
+        public async Task<CustomResponse<Dto>> GetByIdAsync(Expression<Func<Entity, bool>> expression)
         {
-            return await _repository.GetByIdAsync(expression);
+            var entity = await _repository.GetByIdAsync(expression);
+            var dto = _mapper.Map<Dto>(entity);
+
+            return CustomResponse<Dto>.Success(StatusCodes.Status200OK, dto);
         }
 
-        public async Task UpdateAsync(T item)
+        public async Task<CustomResponse<NoContentResponse>> UpdateAsync(Dto item, int id)
         {
-            _repository.Update(item);
-            await _unitOfWork.CommitAsync();
+            var entity = _mapper.Map<Entity>(item);
+            entity.Id = id;
+            if (await _repository.AnyAsync(x => x.Id == id && x.IsActive == true)) {
+                _repository.Update(entity);
+                await _unitOfWork.CommitAsync();
+                return CustomResponse<NoContentResponse>.Success(StatusCodes.Status200OK);
+            }
+            return CustomResponse<NoContentResponse>.Fail(StatusCodes.Status404NotFound,$" {typeof(Entity)} ({id}) not found. Updete operation is not successfull. ");
         }
 
-        public IQueryable<T> Where(Expression<Func<T, bool>> expression)
-        {
-            return _repository.Where(expression);
-        }
+    public async Task<CustomResponse<IEnumerable<Dto>>> Where(Expression<Func<Entity, bool>> expression)
+    {
+        var entities = await _repository.Where(expression).ToListAsync();
+        var dtos = _mapper.Map<IEnumerable<Dto>>(entities);
+
+        return CustomResponse<IEnumerable<Dto>>.Success(StatusCodes.Status200OK, dtos);
     }
+}
 }

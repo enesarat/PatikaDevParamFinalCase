@@ -9,67 +9,45 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using ShoppingMate.Core.Repository;
+using ShoppingMate.Core.DTO.Concrete;
+using AutoMapper;
+using ShoppingMate.Core.DTO;
+using Microsoft.AspNetCore.Http;
 
 namespace ShoppingMate.Service.Service.Concrete
 {
-    public class ProductService : IProductService
+    public class ProductService : GenericService<Product, ProductDto>, IProductService
     {
-        private readonly IUnitOfWork _unitOfWork;
-
-        public ProductService(IUnitOfWork unitOfWork)
+        private readonly IProductRepository _productRepository;
+        public ProductService(IGenericRepository<Product> repository, IUnitOfWork unitOfWork, IMapper mapper, IProductRepository productRepository) : base(repository, unitOfWork, mapper)
         {
-            _unitOfWork = unitOfWork;
+            _productRepository = productRepository;
         }
 
-        public async Task<Product> AddAsync(Product item)
+        public async Task<CustomResponse<ProductDto>> AddAsync(ProductCreateDto dto)
         {
-            item.CreateDate = DateTime.Now;
-            item.CreatedBy = "SystemUser";
-            await _unitOfWork.ProductRepository.AddAsync(item);
+            var newEntity = _mapper.Map<Product>(dto);
+
+            await _productRepository.AddAsync(newEntity);
             await _unitOfWork.CommitAsync();
 
-            return item;
+            var newDto = _mapper.Map<ProductDto>(newEntity);
+            return CustomResponse<ProductDto>.Success(StatusCodes.Status200OK, newDto);
         }
 
-        public async Task<bool> AnyAsync(Expression<Func<Product, bool>> expression)
+        public async Task<CustomResponse<NoContentResponse>> UpdateAsync(ProductUpdateDto dto, int id)
         {
-            var status = await _unitOfWork.ProductRepository.AnyAsync(expression);
-
-            return status;
-        }
-
-        public async Task DeleteAsync(Product item)
-        {
-            _unitOfWork.ProductRepository.Delete(item);
-            await _unitOfWork.CommitAsync();
-        }
-
-        public async Task<IEnumerable<Product>> GetAllAsync()
-        {
-            var itemList = await _unitOfWork.ProductRepository.GetAllAsync();
-
-            return itemList;
-        }
-
-        public Task<Product> GetByIdAsync(Expression<Func<Product, bool>> expression)
-        {
-            var item = _unitOfWork.ProductRepository.GetByIdAsync(expression);
-
-            return item;
-        }
-
-        public async Task UpdateAsync(Product item)
-        {
-            item.UpdateDate = DateTime.Now;
-            _unitOfWork.ProductRepository.Update(item);
-            await _unitOfWork.CommitAsync();
-        }
-
-        public IQueryable<Product> Where(Expression<Func<Product, bool>> expression)
-        {
-            var result = _unitOfWork.ProductRepository.Where(expression);
-
-            return result;
+            var entity = _mapper.Map<Product>(dto);
+            entity.Id = id;
+            if (await _productRepository.AnyAsync(x => x.Id == id && x.IsActive == true))
+            {
+                _productRepository.Update(entity);
+                await _unitOfWork.CommitAsync();
+                return CustomResponse<NoContentResponse>.Success(StatusCodes.Status200OK);
+            }
+            return CustomResponse<NoContentResponse>.Fail(StatusCodes.Status404NotFound, $" {typeof(Product)} ({id}) not found. Updete operation is not successfull. ");
         }
     }
 }
+

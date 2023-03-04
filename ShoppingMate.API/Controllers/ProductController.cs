@@ -11,60 +11,48 @@ namespace ShoppingMate.API.Controllers
 {
 
     [ValidateFilterAttribute]
-    [ServiceFilter(typeof(NotFoundFilter<Product>))]
     public class ProductController : CustomBaseController
     {
-        private readonly IMapper _mapper;
         private readonly IProductService _service;
-        public ProductController(IMapper mapper, IProductService service)
+        public ProductController(IProductService service)
         {
-            _mapper = mapper;
             _service = service;
         }
 
         [HttpGet("{id}")]
+        [ServiceFilter(typeof(NotFoundFilter<Product, ProductDto>))]
+
         public async Task<IActionResult> GetById(int id)
         {
-            var product = await _service.GetByIdAsync(x=>x.IsActive==true && x.Id==id);
-            var productAsDto = _mapper.Map<ProductDto>(product);
-
-            return CustomActionResult(CustomResponse<ProductDto>.Success(200, productAsDto));
+            return CustomActionResult(await _service.GetByIdAsync(x => x.IsActive == true && x.Id == id));
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var products = await _service.GetAllAsync();
-            var productAsDto = _mapper.Map<List<ProductDto>>(products);
-
-            return CustomActionResult(CustomResponse<List<ProductDto>>.Success(200, productAsDto));
+            return CustomActionResult(await _service.GetAllAsync(x => x.IsActive == true));
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(ProductCreateDto productDto)
         {
-            var product = _mapper.Map<Product>(productDto);
-            await _service.AddAsync(product);
-
-            return CustomActionResult(CustomResponse<Product>.Success(201, product));
+            return CustomActionResult(await _service.AddAsync(productDto));
         }
 
         [HttpPut("{id}")]
+        [ServiceFilter(typeof(NotFoundFilter<Product, ProductDto>))]
+
         public async Task<IActionResult> Update([FromRoute] int id, [FromBody] ProductUpdateDto productDto)
         {
-            var product = _mapper.Map<Product>(productDto);
-            await _service.UpdateAsync(product);
-
-            return CustomActionResult(CustomResponse<NoContentResponse>.Success(204));
+            return CustomActionResult(await _service.UpdateAsync(productDto, id));
         }
 
         [HttpDelete("{id}")]
+        [ServiceFilter(typeof(NotFoundFilter<Product, ProductDto>))]
+
         public async Task<IActionResult> Delete(int id)
         {
-            var product = await _service.GetByIdAsync(x => x.IsActive == true && x.Id == id);
-            await _service.DeleteAsync(product);
-
-            return CustomActionResult(CustomResponse<NoContentResponse>.Success(204));
+            return CustomActionResult(await _service.DeleteAsync(id));
         }
     }
 }
