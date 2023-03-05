@@ -32,8 +32,6 @@ namespace ShoppingMate.Service.Mapper
             CreateMap<ShoppingList, ShoppingListDto>().ReverseMap();
             CreateMap<ShoppingListCreateDto, ShoppingList>();
             CreateMap<ShoppingListUpdateDto, ShoppingList>();
-
-            CreateMap<Item, ItemDto>().ReverseMap();
         }
     }
 }

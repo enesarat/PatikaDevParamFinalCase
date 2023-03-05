@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ShoppingMate.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class initial_migration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -110,27 +110,32 @@ namespace ShoppingMate.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ItemsShoppingListsJoint",
+                name: "ItemShoppingListJoint",
                 columns: table => new
                 {
                     ItemId = table.Column<int>(type: "int", nullable: false),
-                    ShoppingListId = table.Column<int>(type: "int", nullable: false)
+                    ShoppingListId = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ItemsShoppingListsJoint", x => new { x.ItemId, x.ShoppingListId });
+                    table.PrimaryKey("PK_ItemShoppingListJoint", x => new { x.ItemId, x.ShoppingListId });
                     table.ForeignKey(
-                        name: "ItemFK",
+                        name: "FK_ItemShoppingListJoint_Items_ItemId",
                         column: x => x.ItemId,
                         principalTable: "Items",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "ShoppingListFK",
+                        name: "FK_ItemShoppingListJoint_ShoppingLists_ShoppingListId",
                         column: x => x.ShoppingListId,
                         principalTable: "ShoppingLists",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.InsertData(
@@ -138,10 +143,10 @@ namespace ShoppingMate.Data.Migrations
                 columns: new[] { "Id", "CreateDate", "CreatedBy", "IsActive", "Name", "UpdateDate" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2023, 3, 3, 1, 45, 42, 110, DateTimeKind.Local).AddTicks(6612), null, true, "Clothes", null },
-                    { 2, new DateTime(2023, 3, 3, 1, 45, 42, 110, DateTimeKind.Local).AddTicks(6624), null, true, "Household Appliances", null },
-                    { 3, new DateTime(2023, 3, 3, 1, 45, 42, 110, DateTimeKind.Local).AddTicks(6625), null, true, "Food", null },
-                    { 4, new DateTime(2023, 3, 3, 1, 45, 42, 110, DateTimeKind.Local).AddTicks(6626), null, true, "Furniture", null }
+                    { 1, new DateTime(2023, 3, 5, 11, 27, 39, 688, DateTimeKind.Local).AddTicks(3807), null, true, "Clothes", null },
+                    { 2, new DateTime(2023, 3, 5, 11, 27, 39, 688, DateTimeKind.Local).AddTicks(3821), null, true, "Household Appliances", null },
+                    { 3, new DateTime(2023, 3, 5, 11, 27, 39, 688, DateTimeKind.Local).AddTicks(3822), null, true, "Food", null },
+                    { 4, new DateTime(2023, 3, 5, 11, 27, 39, 688, DateTimeKind.Local).AddTicks(3822), null, true, "Furniture", null }
                 });
 
             migrationBuilder.InsertData(
@@ -149,22 +154,22 @@ namespace ShoppingMate.Data.Migrations
                 columns: new[] { "Id", "CategoryId", "CreateDate", "CreatedBy", "IsActive", "Name", "Price", "Stock", "UnitType", "UpdateDate" },
                 values: new object[,]
                 {
-                    { 1, 1, new DateTime(2023, 3, 3, 1, 45, 42, 110, DateTimeKind.Local).AddTicks(9206), null, true, "Blue Jean", 80m, 100, "piece", null },
-                    { 2, 1, new DateTime(2023, 3, 3, 1, 45, 42, 110, DateTimeKind.Local).AddTicks(9210), null, true, "Leather Jacket", 150m, 100, "piece", null },
-                    { 3, 1, new DateTime(2023, 3, 3, 1, 45, 42, 110, DateTimeKind.Local).AddTicks(9212), null, true, "Sweetshirt", 60m, 100, "piece", null },
-                    { 4, 1, new DateTime(2023, 3, 3, 1, 45, 42, 110, DateTimeKind.Local).AddTicks(9214), null, true, "Dress", 200m, 100, "piece", null },
-                    { 5, 2, new DateTime(2023, 3, 3, 1, 45, 42, 110, DateTimeKind.Local).AddTicks(9215), null, true, "Washing Machine", 500m, 50, "piece", null },
-                    { 6, 2, new DateTime(2023, 3, 3, 1, 45, 42, 110, DateTimeKind.Local).AddTicks(9216), null, true, "Vacuum Cleaner", 70m, 50, "piece", null },
-                    { 7, 2, new DateTime(2023, 3, 3, 1, 45, 42, 110, DateTimeKind.Local).AddTicks(9217), null, true, "Television", 400m, 50, "piece", null },
-                    { 8, 2, new DateTime(2023, 3, 3, 1, 45, 42, 110, DateTimeKind.Local).AddTicks(9219), null, true, "Refrigerator", 650m, 50, "piece", null },
-                    { 9, 3, new DateTime(2023, 3, 3, 1, 45, 42, 110, DateTimeKind.Local).AddTicks(9220), null, true, "Pasta", 3m, 250, "piece", null },
-                    { 10, 3, new DateTime(2023, 3, 3, 1, 45, 42, 110, DateTimeKind.Local).AddTicks(9221), null, true, "Oil", 8m, 250, "piece", null },
-                    { 11, 3, new DateTime(2023, 3, 3, 1, 45, 42, 110, DateTimeKind.Local).AddTicks(9223), null, true, "Milk", 5m, 250, "piece", null },
-                    { 12, 3, new DateTime(2023, 3, 3, 1, 45, 42, 110, DateTimeKind.Local).AddTicks(9224), null, true, "Bread", 1m, 250, "piece", null },
-                    { 13, 4, new DateTime(2023, 3, 3, 1, 45, 42, 110, DateTimeKind.Local).AddTicks(9226), null, true, "Chair", 20m, 150, "piece", null },
-                    { 14, 4, new DateTime(2023, 3, 3, 1, 45, 42, 110, DateTimeKind.Local).AddTicks(9228), null, true, "Commode", 30m, 150, "piece", null },
-                    { 15, 4, new DateTime(2023, 3, 3, 1, 45, 42, 110, DateTimeKind.Local).AddTicks(9229), null, true, "Seat", 50m, 150, "piece", null },
-                    { 16, 4, new DateTime(2023, 3, 3, 1, 45, 42, 110, DateTimeKind.Local).AddTicks(9230), null, true, "Lampshade", 15m, 150, "piece", null }
+                    { 1, 1, new DateTime(2023, 3, 5, 11, 27, 39, 688, DateTimeKind.Local).AddTicks(6225), null, true, "Blue Jean", 80m, 100, "piece", null },
+                    { 2, 1, new DateTime(2023, 3, 5, 11, 27, 39, 688, DateTimeKind.Local).AddTicks(6228), null, true, "Leather Jacket", 150m, 100, "piece", null },
+                    { 3, 1, new DateTime(2023, 3, 5, 11, 27, 39, 688, DateTimeKind.Local).AddTicks(6229), null, true, "Sweetshirt", 60m, 100, "piece", null },
+                    { 4, 1, new DateTime(2023, 3, 5, 11, 27, 39, 688, DateTimeKind.Local).AddTicks(6231), null, true, "Dress", 200m, 100, "piece", null },
+                    { 5, 2, new DateTime(2023, 3, 5, 11, 27, 39, 688, DateTimeKind.Local).AddTicks(6233), null, true, "Washing Machine", 500m, 50, "piece", null },
+                    { 6, 2, new DateTime(2023, 3, 5, 11, 27, 39, 688, DateTimeKind.Local).AddTicks(6234), null, true, "Vacuum Cleaner", 70m, 50, "piece", null },
+                    { 7, 2, new DateTime(2023, 3, 5, 11, 27, 39, 688, DateTimeKind.Local).AddTicks(6235), null, true, "Television", 400m, 50, "piece", null },
+                    { 8, 2, new DateTime(2023, 3, 5, 11, 27, 39, 688, DateTimeKind.Local).AddTicks(6236), null, true, "Refrigerator", 650m, 50, "piece", null },
+                    { 9, 3, new DateTime(2023, 3, 5, 11, 27, 39, 688, DateTimeKind.Local).AddTicks(6237), null, true, "Pasta", 3m, 250, "piece", null },
+                    { 10, 3, new DateTime(2023, 3, 5, 11, 27, 39, 688, DateTimeKind.Local).AddTicks(6239), null, true, "Oil", 8m, 250, "piece", null },
+                    { 11, 3, new DateTime(2023, 3, 5, 11, 27, 39, 688, DateTimeKind.Local).AddTicks(6240), null, true, "Milk", 5m, 250, "piece", null },
+                    { 12, 3, new DateTime(2023, 3, 5, 11, 27, 39, 688, DateTimeKind.Local).AddTicks(6242), null, true, "Bread", 1m, 250, "piece", null },
+                    { 13, 4, new DateTime(2023, 3, 5, 11, 27, 39, 688, DateTimeKind.Local).AddTicks(6243), null, true, "Chair", 20m, 150, "piece", null },
+                    { 14, 4, new DateTime(2023, 3, 5, 11, 27, 39, 688, DateTimeKind.Local).AddTicks(6245), null, true, "Commode", 30m, 150, "piece", null },
+                    { 15, 4, new DateTime(2023, 3, 5, 11, 27, 39, 688, DateTimeKind.Local).AddTicks(6246), null, true, "Seat", 50m, 150, "piece", null },
+                    { 16, 4, new DateTime(2023, 3, 5, 11, 27, 39, 688, DateTimeKind.Local).AddTicks(6247), null, true, "Lampshade", 15m, 150, "piece", null }
                 });
 
             migrationBuilder.InsertData(
@@ -172,10 +177,10 @@ namespace ShoppingMate.Data.Migrations
                 columns: new[] { "Id", "CategoryId", "CompleteTime", "CreateDate", "CreatedBy", "IsActive", "IsCompleted", "Name", "TotalCost", "UpdateDate" },
                 values: new object[,]
                 {
-                    { 1, 1, null, new DateTime(2023, 3, 3, 1, 45, 42, 111, DateTimeKind.Local).AddTicks(394), null, true, false, "Clothes List", 0.0, null },
-                    { 2, 2, null, new DateTime(2023, 3, 3, 1, 45, 42, 111, DateTimeKind.Local).AddTicks(397), null, true, false, "Household Appliances List", 0.0, null },
-                    { 3, 3, null, new DateTime(2023, 3, 3, 1, 45, 42, 111, DateTimeKind.Local).AddTicks(398), null, true, false, "Foods List", 0.0, null },
-                    { 4, 4, null, new DateTime(2023, 3, 3, 1, 45, 42, 111, DateTimeKind.Local).AddTicks(399), null, true, false, "Furnitures List", 0.0, null }
+                    { 1, 1, null, new DateTime(2023, 3, 5, 11, 27, 39, 688, DateTimeKind.Local).AddTicks(7269), null, true, false, "Clothes List", 0.0, null },
+                    { 2, 2, null, new DateTime(2023, 3, 5, 11, 27, 39, 688, DateTimeKind.Local).AddTicks(7273), null, true, false, "Household Appliances List", 0.0, null },
+                    { 3, 3, null, new DateTime(2023, 3, 5, 11, 27, 39, 688, DateTimeKind.Local).AddTicks(7274), null, true, false, "Foods List", 0.0, null },
+                    { 4, 4, null, new DateTime(2023, 3, 5, 11, 27, 39, 688, DateTimeKind.Local).AddTicks(7275), null, true, false, "Furnitures List", 0.0, null }
                 });
 
             migrationBuilder.InsertData(
@@ -183,22 +188,22 @@ namespace ShoppingMate.Data.Migrations
                 columns: new[] { "Id", "CreateDate", "CreatedBy", "IsActive", "IsBought", "ProductId", "Quantity", "UpdateDate" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2023, 3, 3, 1, 45, 42, 110, DateTimeKind.Local).AddTicks(7975), null, true, false, 1, 3, null },
-                    { 2, new DateTime(2023, 3, 3, 1, 45, 42, 110, DateTimeKind.Local).AddTicks(7980), null, true, false, 2, 1, null },
-                    { 3, new DateTime(2023, 3, 3, 1, 45, 42, 110, DateTimeKind.Local).AddTicks(7981), null, true, false, 3, 5, null },
-                    { 4, new DateTime(2023, 3, 3, 1, 45, 42, 110, DateTimeKind.Local).AddTicks(7982), null, true, false, 4, 2, null },
-                    { 5, new DateTime(2023, 3, 3, 1, 45, 42, 110, DateTimeKind.Local).AddTicks(7983), null, true, false, 5, 1, null },
-                    { 6, new DateTime(2023, 3, 3, 1, 45, 42, 110, DateTimeKind.Local).AddTicks(7984), null, true, false, 6, 1, null },
-                    { 7, new DateTime(2023, 3, 3, 1, 45, 42, 110, DateTimeKind.Local).AddTicks(7985), null, true, false, 7, 2, null },
-                    { 8, new DateTime(2023, 3, 3, 1, 45, 42, 110, DateTimeKind.Local).AddTicks(7986), null, true, false, 8, 1, null },
-                    { 9, new DateTime(2023, 3, 3, 1, 45, 42, 110, DateTimeKind.Local).AddTicks(7987), null, true, false, 9, 10, null },
-                    { 10, new DateTime(2023, 3, 3, 1, 45, 42, 110, DateTimeKind.Local).AddTicks(7988), null, true, false, 10, 2, null },
-                    { 11, new DateTime(2023, 3, 3, 1, 45, 42, 110, DateTimeKind.Local).AddTicks(7989), null, true, false, 11, 5, null },
-                    { 12, new DateTime(2023, 3, 3, 1, 45, 42, 110, DateTimeKind.Local).AddTicks(7990), null, true, false, 12, 3, null },
-                    { 13, new DateTime(2023, 3, 3, 1, 45, 42, 110, DateTimeKind.Local).AddTicks(7991), null, true, false, 13, 4, null },
-                    { 14, new DateTime(2023, 3, 3, 1, 45, 42, 110, DateTimeKind.Local).AddTicks(7991), null, true, false, 14, 1, null },
-                    { 15, new DateTime(2023, 3, 3, 1, 45, 42, 110, DateTimeKind.Local).AddTicks(7992), null, true, false, 15, 2, null },
-                    { 16, new DateTime(2023, 3, 3, 1, 45, 42, 110, DateTimeKind.Local).AddTicks(7993), null, true, false, 16, 5, null }
+                    { 1, new DateTime(2023, 3, 5, 11, 27, 39, 688, DateTimeKind.Local).AddTicks(5105), null, true, false, 1, 3, null },
+                    { 2, new DateTime(2023, 3, 5, 11, 27, 39, 688, DateTimeKind.Local).AddTicks(5112), null, true, false, 2, 1, null },
+                    { 3, new DateTime(2023, 3, 5, 11, 27, 39, 688, DateTimeKind.Local).AddTicks(5114), null, true, false, 3, 5, null },
+                    { 4, new DateTime(2023, 3, 5, 11, 27, 39, 688, DateTimeKind.Local).AddTicks(5114), null, true, false, 4, 2, null },
+                    { 5, new DateTime(2023, 3, 5, 11, 27, 39, 688, DateTimeKind.Local).AddTicks(5115), null, true, false, 5, 1, null },
+                    { 6, new DateTime(2023, 3, 5, 11, 27, 39, 688, DateTimeKind.Local).AddTicks(5117), null, true, false, 6, 1, null },
+                    { 7, new DateTime(2023, 3, 5, 11, 27, 39, 688, DateTimeKind.Local).AddTicks(5118), null, true, false, 7, 2, null },
+                    { 8, new DateTime(2023, 3, 5, 11, 27, 39, 688, DateTimeKind.Local).AddTicks(5119), null, true, false, 8, 1, null },
+                    { 9, new DateTime(2023, 3, 5, 11, 27, 39, 688, DateTimeKind.Local).AddTicks(5120), null, true, false, 9, 10, null },
+                    { 10, new DateTime(2023, 3, 5, 11, 27, 39, 688, DateTimeKind.Local).AddTicks(5121), null, true, false, 10, 2, null },
+                    { 11, new DateTime(2023, 3, 5, 11, 27, 39, 688, DateTimeKind.Local).AddTicks(5122), null, true, false, 11, 5, null },
+                    { 12, new DateTime(2023, 3, 5, 11, 27, 39, 688, DateTimeKind.Local).AddTicks(5123), null, true, false, 12, 3, null },
+                    { 13, new DateTime(2023, 3, 5, 11, 27, 39, 688, DateTimeKind.Local).AddTicks(5124), null, true, false, 13, 4, null },
+                    { 14, new DateTime(2023, 3, 5, 11, 27, 39, 688, DateTimeKind.Local).AddTicks(5125), null, true, false, 14, 1, null },
+                    { 15, new DateTime(2023, 3, 5, 11, 27, 39, 688, DateTimeKind.Local).AddTicks(5125), null, true, false, 15, 2, null },
+                    { 16, new DateTime(2023, 3, 5, 11, 27, 39, 688, DateTimeKind.Local).AddTicks(5126), null, true, false, 16, 5, null }
                 });
 
             migrationBuilder.CreateIndex(
@@ -207,8 +212,8 @@ namespace ShoppingMate.Data.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ItemsShoppingListsJoint_ShoppingListId",
-                table: "ItemsShoppingListsJoint",
+                name: "IX_ItemShoppingListJoint_ShoppingListId",
+                table: "ItemShoppingListJoint",
                 column: "ShoppingListId");
 
             migrationBuilder.CreateIndex(
@@ -226,7 +231,7 @@ namespace ShoppingMate.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ItemsShoppingListsJoint");
+                name: "ItemShoppingListJoint");
 
             migrationBuilder.DropTable(
                 name: "Items");

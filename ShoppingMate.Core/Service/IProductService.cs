@@ -12,6 +12,8 @@ namespace ShoppingMate.Core.Service
 {
     public interface IProductService : IGenericService<Product, ProductDto>
     {
+        Task<CustomResponse<List<ProductsWithCategoryDto>>> GetProductsWithCategory();
+
         Task<CustomResponse<NoContentResponse>> UpdateAsync(ProductUpdateDto dto, int id);
         Task<CustomResponse<ProductDto>> AddAsync(ProductCreateDto dto);
     }

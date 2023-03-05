@@ -33,6 +33,13 @@ namespace ShoppingMate.API.Controllers
             return CustomActionResult(await _service.GetAllAsync());
         }
 
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetProductsWithCategory()
+        {
+            return CustomActionResult(await _service.GetProductsWithCategory());
+        }
+
+
         [HttpPost]
         public async Task<IActionResult> Create(ProductCreateDto productDto)
         {

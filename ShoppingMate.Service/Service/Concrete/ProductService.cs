@@ -36,6 +36,15 @@ namespace ShoppingMate.Service.Service.Concrete
             return CustomResponse<ProductDto>.Success(StatusCodes.Status200OK, newDto);
         }
 
+        public async Task<CustomResponse<List<ProductsWithCategoryDto>>> GetProductsWithCategory()
+        {
+            var products = await _productRepository.GetProductsWithCategory();
+            var activeProducts = products.Where(x => x.IsActive == true).ToList();
+
+            var productsDto = _mapper.Map<List<ProductsWithCategoryDto>>(activeProducts);
+            return CustomResponse<List<ProductsWithCategoryDto>>.Success(StatusCodes.Status200OK, productsDto);
+        }
+
         public async Task<CustomResponse<NoContentResponse>> UpdateAsync(ProductUpdateDto dto, int id)
         {
             var entity = _mapper.Map<Product>(dto);

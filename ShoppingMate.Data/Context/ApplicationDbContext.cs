@@ -37,13 +37,19 @@ namespace ShoppingMate.Data.Context
                 .HasPrecision(18, 2)
                 .HasColumnType("decimal(18,2)");
 
-            builder.Entity<Item>()
 
-                 .HasMany(x => x.ShoppingLists).WithMany(x => x.Items)
-                 .UsingEntity<Dictionary<string, object>>("ItemsShoppingListsJoint",
-                 x => x.HasOne<ShoppingList>().WithMany().HasForeignKey("ShoppingListId").HasConstraintName("ShoppingListFK"),
-                 x => x.HasOne<Item>().WithMany().HasForeignKey("ItemId").HasConstraintName("ItemFK"));
 
+
+            builder.Entity<ItemShoppingListJoint>()
+                .HasKey(ky => new { ky.ItemId, ky.ShoppingListId });
+            builder.Entity<ItemShoppingListJoint>()
+                .HasOne(ky => ky.Item)
+                .WithMany(k => k.ShoppingLists)
+                .HasForeignKey(ky => ky.ItemId);
+            builder.Entity<ItemShoppingListJoint>()
+                .HasOne(ky=>ky.ShoppingList)
+                .WithMany(k=>k.Items)
+                .HasForeignKey(ky => ky.ShoppingListId);
             
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
