@@ -5,7 +5,7 @@ using ShoppingMate.Core.DTO;
 
 namespace ShoppingMate.API.Controllers
 {
-    [Route("[controller]")]
+    [Route("[controller]s")]
     [ApiController]
     public class CustomBaseController : ControllerBase
     {

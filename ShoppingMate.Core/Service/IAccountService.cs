@@ -3,6 +3,7 @@ using ShoppingMate.Core.DTO.Concrete.Account;
 using ShoppingMate.Core.DTO.Concrete.Category;
 using ShoppingMate.Core.DTO.Concrete.Product;
 using ShoppingMate.Core.Model.Concrete;
+using ShoppingMate.Core.Model.Token;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,8 @@ namespace ShoppingMate.Core.Service
         Task<CustomResponse<AccountDto>> AddCustomerAsync(AccountCreateDto dto);
         Task<CustomResponse<AccountDto>> AddAdminAsync(AccountCreateDto dto);
         Task<CustomResponse<AccountDto>> GetByIdAsync(int id);
+        AccountDto Authenticate(TokenRequest userLogin);
+        string Generate(AccountDto user);
 
     }
 }
