@@ -22,6 +22,10 @@ namespace ShoppingMate.Data.Context
         public DbSet<Product> Products { get; set; }
         public DbSet<Item> Items { get; set; }
         public DbSet<ShoppingList> ShoppingLists { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<Account> Accounts { get; set; }
+
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

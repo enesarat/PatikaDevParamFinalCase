@@ -20,6 +20,7 @@ namespace ShoppingMate.Data.UnitOfWork
         public IGenericRepository<Product> ProductRepository { get; private set; }
         public IGenericRepository<Item> ItemRepository { get; private set; }
         public IGenericRepository<ShoppingList> ShoppingListRepository { get; private set; }
+        public IGenericRepository<Role> RoleRepository { get; private set; }
 
         public UnitOfWork(ApplicationDbContext dbContext)
         {

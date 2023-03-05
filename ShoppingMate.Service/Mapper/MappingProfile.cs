@@ -2,6 +2,7 @@
 using ShoppingMate.Core.DTO.Concrete.Category;
 using ShoppingMate.Core.DTO.Concrete.Item;
 using ShoppingMate.Core.DTO.Concrete.Product;
+using ShoppingMate.Core.DTO.Concrete.Role;
 using ShoppingMate.Core.DTO.Concrete.ShoppingList;
 using ShoppingMate.Core.Model.Concrete;
 using System;
@@ -32,6 +33,10 @@ namespace ShoppingMate.Service.Mapper
             CreateMap<ShoppingList, ShoppingListDto>().ReverseMap();
             CreateMap<ShoppingListCreateDto, ShoppingList>();
             CreateMap<ShoppingListUpdateDto, ShoppingList>();
+
+            CreateMap<Role, RoleDto>().ReverseMap();
+            CreateMap<RoleCreateDto, Role>();
+            CreateMap<RoleUpdateDto, Role>();
         }
     }
 }

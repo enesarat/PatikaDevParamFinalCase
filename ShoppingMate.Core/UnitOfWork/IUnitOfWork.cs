@@ -15,6 +15,7 @@ namespace ShoppingMate.Core.UnitOfWork
         IGenericRepository<Product> ProductRepository { get; }
         IGenericRepository<Item> ItemRepository { get; }
         IGenericRepository<ShoppingList> ShoppingListRepository { get; }
+        IGenericRepository<Role> RoleRepository { get; }
 
         Task CommitAsync();
         void Commit();

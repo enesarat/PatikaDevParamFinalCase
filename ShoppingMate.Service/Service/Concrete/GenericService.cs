@@ -71,9 +71,13 @@ namespace ShoppingMate.Service.Service.Concrete
         public async Task<CustomResponse<Dto>> GetByIdAsync(int id)
         {
             var entity = await _repository.GetByIdAsync(id);
-            var dto = _mapper.Map<Dto>(entity);
+            if (entity.IsActive != false)
+            {
+                var dto = _mapper.Map<Dto>(entity);
 
-            return CustomResponse<Dto>.Success(StatusCodes.Status200OK, dto);
+                return CustomResponse<Dto>.Success(StatusCodes.Status200OK, dto);
+            }
+            return CustomResponse<Dto>.Fail(StatusCodes.Status404NotFound, $" {typeof(Entity).Name} ({id}) not found. Retrieve operation is not successfull. ");
         }
 
         public async Task<CustomResponse<NoContentResponse>> UpdateAsync(Dto item, int id)
