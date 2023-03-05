@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ShoppingMate.Core.DTO.Concrete.Account;
 using ShoppingMate.Core.DTO.Concrete.Category;
 using ShoppingMate.Core.DTO.Concrete.Item;
 using ShoppingMate.Core.DTO.Concrete.Product;
@@ -37,6 +38,12 @@ namespace ShoppingMate.Service.Mapper
             CreateMap<Role, RoleDto>().ReverseMap();
             CreateMap<RoleCreateDto, Role>();
             CreateMap<RoleUpdateDto, Role>();
+
+            CreateMap<Account, AccountDto>().ForMember(dest=>dest.Role, opt=>opt.MapFrom(src=>src.Role.Name));
+            CreateMap<AccountDto, Account>().ForMember(dest => dest.RoleId, opt => opt.MapFrom(RoleDto=>RoleDto.Id));
+            CreateMap<AccountCreateDto, Account>();
+            CreateMap<AccountUpdateDto, Account>();
         }
+    
     }
 }

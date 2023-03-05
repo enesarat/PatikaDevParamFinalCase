@@ -21,6 +21,7 @@ namespace ShoppingMate.Data.UnitOfWork
         public IGenericRepository<Item> ItemRepository { get; private set; }
         public IGenericRepository<ShoppingList> ShoppingListRepository { get; private set; }
         public IGenericRepository<Role> RoleRepository { get; private set; }
+        public IGenericRepository<Account> AccountRepository { get; private set; }
 
         public UnitOfWork(ApplicationDbContext dbContext)
         {
@@ -30,6 +31,8 @@ namespace ShoppingMate.Data.UnitOfWork
             ProductRepository = new GenericRepository<Product>(dbContext);
             ItemRepository= new GenericRepository<Item>(dbContext);
             ShoppingListRepository = new GenericRepository<ShoppingList>(dbContext);
+            RoleRepository = new GenericRepository<Role>(dbContext);
+            AccountRepository = new GenericRepository<Account>(dbContext);
         }
 
 
