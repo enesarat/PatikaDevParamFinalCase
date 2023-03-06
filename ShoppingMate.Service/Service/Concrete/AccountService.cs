@@ -28,12 +28,13 @@ namespace ShoppingMate.Service.Service.Concrete
     {
         private readonly IAccountRepository _accountRepository;
         private IConfiguration _config;
+        private readonly IHttpContextAccessor _contextAccessor;
 
-
-        public AccountService(IGenericRepository<Account> repository, IUnitOfWork unitOfWork, IMapper mapper, IAccountRepository accountRepository, IConfiguration config) : base(repository, unitOfWork, mapper)
+        public AccountService(IGenericRepository<Account> repository, IUnitOfWork unitOfWork, IMapper mapper, IAccountRepository accountRepository, IConfiguration config, IHttpContextAccessor contextAccessor) : base(repository, unitOfWork, mapper)
         {
             _accountRepository = accountRepository;
             _config = config;
+            _contextAccessor = contextAccessor;
         }
 
         public async Task<CustomResponse<AccountDto>> AddCustomerAsync(AccountCreateDto dto)
@@ -179,6 +180,27 @@ namespace ShoppingMate.Service.Service.Concrete
             }
             else
                 throw new InvalidOperationException("Email or password is invalid.");
+        }
+
+        public async Task<AccountDto> GetCurrentAccount()
+        {
+            var identity = _contextAccessor.HttpContext.User.Identity as ClaimsIdentity;
+
+            if (identity != null)
+            {
+                var userClaims = identity.Claims;
+                AccountDto currentaccount = new AccountDto
+                {
+                    UserName = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.NameIdentifier)?.Value,
+                    Email = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Email)?.Value,
+                    Name = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.GivenName)?.Value,
+                    Role = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Role)?.Value
+
+                };
+                return currentaccount;
+            }
+            else
+                throw new InvalidOperationException("Could not access active user information.");
         }
     }
 }

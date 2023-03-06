@@ -49,22 +49,7 @@ namespace ShoppingMate.API.Controllers
         [HttpGet("[action]")]
         public async Task<IActionResult> GetCurrentAccount()
         {
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-
-            if (identity != null)
-            {
-                var userClaims = identity.Claims;
-                AccountDto currentaccount = new AccountDto
-                {
-                    UserName = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.NameIdentifier)?.Value,
-                    Email = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Email)?.Value,
-                    Name = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.GivenName)?.Value,
-                    Role = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Role)?.Value
-
-                };
-                return CustomActionResult(CustomResponse<AccountDto>.Success(StatusCodes.Status200OK, currentaccount));
-            }
-            return CustomActionResult(CustomResponse<AccountDto>.Fail(StatusCodes.Status404NotFound, $" {typeof(Account).Name} not found. Retrieve operation is not successfull. "));
+            return CustomActionResult(CustomResponse<AccountDto>.Success(StatusCodes.Status200OK, await _service.GetCurrentAccount()));
         }
 
         [HttpGet("{id}")]

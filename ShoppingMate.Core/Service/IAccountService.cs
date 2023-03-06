@@ -23,7 +23,7 @@ namespace ShoppingMate.Core.Service
         TokenDto GenerateToken(AccountDto user);
         Task<TokenDto> Login(TokenRequest userLogin);
         Task<TokenDto> RefreshToken(string tokenStr);
-
+        Task<AccountDto> GetCurrentAccount();
 
     }
 }
