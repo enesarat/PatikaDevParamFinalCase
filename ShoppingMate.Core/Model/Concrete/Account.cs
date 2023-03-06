@@ -16,5 +16,7 @@ namespace ShoppingMate.Core.Model.Concrete
         public int RoleId { get; set; } = 2;
         public Role Role { get; set; }
         public DateTime LastActivity { get; set; }
+        public string? RefreshToken { get; set; }
+        public DateTime? RefreshTokenExpireDate { get; set; }
     }
 }

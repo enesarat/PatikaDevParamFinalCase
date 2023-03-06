@@ -2,6 +2,7 @@
 using ShoppingMate.Core.DTO.Concrete.Account;
 using ShoppingMate.Core.DTO.Concrete.Category;
 using ShoppingMate.Core.DTO.Concrete.Product;
+using ShoppingMate.Core.DTO.Concrete.Token;
 using ShoppingMate.Core.Model.Concrete;
 using ShoppingMate.Core.Model.Token;
 using System;
@@ -19,7 +20,10 @@ namespace ShoppingMate.Core.Service
         Task<CustomResponse<AccountDto>> AddAdminAsync(AccountCreateDto dto);
         Task<CustomResponse<AccountDto>> GetByIdAsync(int id);
         AccountDto Authenticate(TokenRequest userLogin);
-        string Generate(AccountDto user);
+        TokenDto GenerateToken(AccountDto user);
+        Task<TokenDto> Login(TokenRequest userLogin);
+        Task<TokenDto> RefreshToken(string tokenStr);
+
 
     }
 }

@@ -15,5 +15,7 @@ namespace ShoppingMate.Core.DTO.Concrete.Account
         public string Email { get; set; }
         public string Role { get; set; }
         public DateTime LastActivity { get; set; }
+        public string? RefreshToken { get; set; }
+        public DateTime? RefreshTokenExpireDate { get; set; }
     }
 }

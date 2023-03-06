@@ -54,7 +54,7 @@ namespace ShoppingMate.Data.Repository
         }
 
         public void Update(T entity)
-        {
+            {
             _entities.Update(entity);
         }
 

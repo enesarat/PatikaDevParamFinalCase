@@ -34,19 +34,18 @@ namespace ShoppingMate.API.Controllers
 
         [AllowAnonymous]
         [HttpPost("connect/token")]
-        public IActionResult Login([FromBody] TokenRequest userLogin)
+        public async Task<IActionResult> Login([FromBody] TokenRequest userLogin)
         {
-            var user = _service.Authenticate(userLogin);
-
-            if (user != null)
-            {
-                var token = _service.Generate(user);
-                return Ok(token);
-            }
-
-            return NotFound("User not found");
+            return Ok(await _service.Login(userLogin));
         }
-        [Authorize(Roles="Admin")]
+
+        [HttpGet("refreshToken")]
+        public async Task<IActionResult> RefreshToken([FromQuery] string token)
+        {
+            return Ok(await _service.RefreshToken(token));
+        }
+
+        [Authorize(Roles = "Admin")]
         [HttpGet("[action]")]
         public async Task<IActionResult> GetCurrentAccount()
         {

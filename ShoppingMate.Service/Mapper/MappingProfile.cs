@@ -39,8 +39,7 @@ namespace ShoppingMate.Service.Mapper
             CreateMap<RoleCreateDto, Role>();
             CreateMap<RoleUpdateDto, Role>();
 
-            CreateMap<Account, AccountDto>().ForMember(dest=>dest.Role, opt=>opt.MapFrom(src=>src.Role.Name));
-            CreateMap<AccountDto, Account>().ForMember(dest => dest.RoleId, opt => opt.MapFrom(RoleDto=>RoleDto.Id));
+            CreateMap<Account, AccountDto>().ReverseMap();
             CreateMap<AccountCreateDto, Account>();
             CreateMap<AccountUpdateDto, Account>();
         }

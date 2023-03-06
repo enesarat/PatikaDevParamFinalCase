@@ -7,6 +7,7 @@ using ShoppingMate.Core.DTO;
 using ShoppingMate.Core.DTO.Concrete.Account;
 using ShoppingMate.Core.DTO.Concrete.Product;
 using ShoppingMate.Core.DTO.Concrete.Role;
+using ShoppingMate.Core.DTO.Concrete.Token;
 using ShoppingMate.Core.Model.Concrete;
 using ShoppingMate.Core.Model.Token;
 using ShoppingMate.Core.Repository;
@@ -54,7 +55,7 @@ namespace ShoppingMate.Service.Service.Concrete
             await _accountRepository.AddAsync(newEntity);
             await _unitOfWork.CommitAsync();
 
-            var refObj =_unitOfWork.RoleRepository.Where(x => x.Id == newEntity.RoleId).FirstOrDefault();
+            var refObj = _unitOfWork.RoleRepository.Where(x => x.Id == newEntity.RoleId).FirstOrDefault();
             var newDto = _mapper.Map<AccountDto>(newEntity);
             newDto.Role = refObj.Name;
             return CustomResponse<AccountDto>.Success(StatusCodes.Status200OK, newDto);
@@ -90,7 +91,7 @@ namespace ShoppingMate.Service.Service.Concrete
             var currentAccount = _accountRepository.Where(o => o.Email.ToLower() == userLogin.Email.ToLower() && o.Password == userLogin.Password).FirstOrDefault();
 
 
-            if (currentAccount != null)
+            if (currentAccount is not null)
             {
                 var refObj = _unitOfWork.RoleRepository.Where(x => x.Id == currentAccount.RoleId).FirstOrDefault();
 
@@ -103,8 +104,9 @@ namespace ShoppingMate.Service.Service.Concrete
             return null;
         }
 
-        public string Generate(AccountDto user)
+        public TokenDto GenerateToken(AccountDto user)
         {
+            TokenDto tokenModel = new TokenDto();
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
@@ -116,14 +118,67 @@ namespace ShoppingMate.Service.Service.Concrete
                 new Claim(ClaimTypes.Role, user.Role),
             };
 
+            tokenModel.Expiration = DateTime.Now.AddMinutes(5);
             var token = new JwtSecurityToken(_config["Jwt:Issuer"],
               _config["Jwt:Audience"],
               claims,
-              expires: DateTime.Now.AddMinutes(15),
+              expires: tokenModel.Expiration,
             signingCredentials: credentials);
-            return new JwtSecurityTokenHandler().WriteToken(token);
+
+            tokenModel.AccessToken = new JwtSecurityTokenHandler().WriteToken(token);
+            tokenModel.RefreshToken = CreateRefreshToken();
+
+            return tokenModel;
         }
 
+        public string CreateRefreshToken()
+        {
+            return Guid.NewGuid().ToString();
+        }
 
+        public async Task<TokenDto> RefreshToken(string tokenStr)
+        {
+            var account = _accountRepository.Where(o => o.RefreshToken == tokenStr).FirstOrDefault();
+            if (account is null)
+            {
+                throw new InvalidOperationException("No account found matching the Refresh token");
+            }
+
+            var currentAccount = _accountRepository.Where(o => o.RefreshTokenExpireDate > DateTime.Now).FirstOrDefault();
+            var role = _unitOfWork.RoleRepository.Where(x => x.Id == currentAccount.RoleId).FirstOrDefault();
+            var accountDto = _mapper.Map<AccountDto>(currentAccount);
+            accountDto.Role = role.Name;
+            if (currentAccount is not null)
+            {
+                TokenDto token =  GenerateToken(accountDto);
+                currentAccount.RefreshToken = token.RefreshToken;
+                currentAccount.RefreshTokenExpireDate = DateTime.Now.AddMinutes(3);
+                _accountRepository.Update(currentAccount);
+                _unitOfWork.Commit();
+
+                return token;
+            }
+            else
+                throw new InvalidOperationException("No Valid refresh tokens were found.");
+        }
+
+        public async Task<TokenDto> Login(TokenRequest userLogin)
+        {
+            var userDto = Authenticate(userLogin);
+
+            if (userDto != null)
+            {
+                var user = _accountRepository.Where(x=>x.Id==userDto.Id).FirstOrDefault();
+                var token = GenerateToken(userDto);
+                user.RefreshToken = token.RefreshToken;
+                user.RefreshTokenExpireDate = token.Expiration.AddMinutes(3);
+                user.UpdateDate = DateTime.Now;
+                _accountRepository.Update(user);
+                _unitOfWork.Commit();
+                return token;
+            }
+            else
+                throw new InvalidOperationException("Email or password is invalid.");
+        }
     }
 }
