@@ -11,7 +11,9 @@ namespace ShoppingMate.Core.Model.Concrete
     {
         public int ProductId { get; set; }
         public Product Product { get; set; }
-        public ICollection<ItemShoppingListJoint> ShoppingLists { get; set; }
+
+        public int ShoppingListId{ get; set; }
+        public ShoppingList ShoppingList { get; set; }
         public int Quantity { get; set; }
         public bool IsBought { get; set; } = false;
     }

@@ -9,6 +9,8 @@ namespace ShoppingMate.Core.DTO.Concrete.Item
     public class ItemUpdateDto
     {
         public int Quantity { get; set; }
+        public int ShoppingListId { get; set; }
+
         public bool IsBought { get; set; } = false;
     }
 }

@@ -44,16 +44,16 @@ namespace ShoppingMate.Data.Context
 
 
 
-            builder.Entity<ItemShoppingListJoint>()
-                .HasKey(ky => new { ky.ItemId, ky.ShoppingListId });
-            builder.Entity<ItemShoppingListJoint>()
-                .HasOne(ky => ky.Item)
-                .WithMany(k => k.ShoppingLists)
-                .HasForeignKey(ky => ky.ItemId);
-            builder.Entity<ItemShoppingListJoint>()
-                .HasOne(ky=>ky.ShoppingList)
-                .WithMany(k=>k.Items)
-                .HasForeignKey(ky => ky.ShoppingListId);
+            //builder.Entity<ItemShoppingListJoint>()
+            //    .HasKey(ky => new { ky.ItemId, ky.ShoppingListId });
+            //builder.Entity<ItemShoppingListJoint>()
+            //    .HasOne(ky => ky.Item)
+            //    .WithMany(k => k.ShoppingLists)
+            //    .HasForeignKey(ky => ky.ItemId);
+            //builder.Entity<ItemShoppingListJoint>()
+            //    .HasOne(ky=>ky.ShoppingList)
+            //    .WithMany(k=>k.Items)
+            //    .HasForeignKey(ky => ky.ShoppingListId);
             
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 

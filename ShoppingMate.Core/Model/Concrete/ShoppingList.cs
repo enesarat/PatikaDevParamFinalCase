@@ -11,8 +11,10 @@ namespace ShoppingMate.Core.Model.Concrete
     {
         public string Name { get; set; }
         public int CategoryId { get; set; }
+        public string ListDescription { get; set; }
+        public string Note { get; set; }
         public Category Category { get; set; }
-        public ICollection<ItemShoppingListJoint> Items { get; set; }
+        public ICollection<Item> Items { get; set; }
         public bool IsCompleted { get; set; } = false;
         public double TotalCost { get; set; }
         public DateTime? CompleteTime { get; set; }

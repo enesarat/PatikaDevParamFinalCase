@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using ShoppingMate.Core.DTO;
+using ShoppingMate.Core.DTO.Concrete.Account;
 using ShoppingMate.Core.DTO.Concrete.Category;
 using ShoppingMate.Core.DTO.Concrete.Item;
 using ShoppingMate.Core.DTO.Concrete.ShoppingList;
@@ -12,6 +13,7 @@ using ShoppingMate.Data.Repository;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,14 +22,18 @@ namespace ShoppingMate.Service.Service.Concrete
     public class ShoppingListService : GenericService<ShoppingList, ShoppingListDto>, IShoppingListService
     {
         private readonly IShoppingListRepository _shoppingListRepository;
-        public ShoppingListService(IGenericRepository<ShoppingList> repository, IUnitOfWork unitOfWork, IMapper mapper, IShoppingListRepository shoppingListRepository) : base(repository, unitOfWork, mapper)
+        private readonly IHttpContextAccessor _contextAccessor;
+
+        public ShoppingListService(IGenericRepository<ShoppingList> repository, IUnitOfWork unitOfWork, IMapper mapper, IShoppingListRepository shoppingListRepository, IHttpContextAccessor contextAccessor) : base(repository, unitOfWork, mapper)
         {
             _shoppingListRepository = shoppingListRepository;
+            _contextAccessor = contextAccessor;
         }
         public async Task<CustomResponse<ShoppingListDto>> AddAsync(ShoppingListCreateDto dto)
         {
             var newEntity = _mapper.Map<ShoppingList>(dto);
-
+            var currentAccount = GetCurrentAccount();
+            newEntity.CreatedBy = currentAccount.Result.Email;
             await _shoppingListRepository.AddAsync(newEntity);
             await _unitOfWork.CommitAsync();
 
@@ -53,6 +59,27 @@ namespace ShoppingMate.Service.Service.Concrete
             await _unitOfWork.CommitAsync();
 
             return CustomResponse<NoContentResponse>.Success(StatusCodes.Status200OK);
+        }
+
+        public async Task<AccountDto> GetCurrentAccount()
+        {
+            var identity = _contextAccessor.HttpContext.User.Identity as ClaimsIdentity;
+
+            if (identity != null)
+            {
+                var userClaims = identity.Claims;
+                AccountDto currentaccount = new AccountDto
+                {
+                    UserName = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.NameIdentifier)?.Value,
+                    Email = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Email)?.Value,
+                    Name = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.GivenName)?.Value,
+                    Role = userClaims.FirstOrDefault(o => o.Type == ClaimTypes.Role)?.Value
+
+                };
+                return currentaccount;
+            }
+            else
+                throw new InvalidOperationException("Could not access active user information.");
         }
     }
 }

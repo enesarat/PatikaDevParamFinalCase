@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ShoppingMate.Core.DTO.Concrete.Account;
 
 namespace ShoppingMate.Core.Service
 {
@@ -16,5 +17,7 @@ namespace ShoppingMate.Core.Service
         Task<CustomResponse<NoContentResponse>> UpdateAsync(ShoppingListUpdateDto dto, int id);
         Task<CustomResponse<ShoppingListDto>> AddAsync(ShoppingListCreateDto dto);
         Task<CustomResponse<NoContentResponse>> DeleteAsync(int id);
+        Task<AccountDto> GetCurrentAccount();
+
     }
 }

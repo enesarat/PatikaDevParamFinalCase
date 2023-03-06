@@ -1,4 +1,5 @@
 ﻿using ShoppingMate.Core.DTO;
+using ShoppingMate.Core.DTO.Concrete.Account;
 using ShoppingMate.Core.DTO.Concrete.Category;
 using ShoppingMate.Core.DTO.Concrete.Product;
 using ShoppingMate.Core.Model.Concrete;
@@ -14,5 +15,7 @@ namespace ShoppingMate.Core.Service
     {
         Task<CustomResponse<NoContentResponse>> UpdateAsync(CategoryUpdateDto dto, int id);
         Task<CustomResponse<CategoryDto>> AddAsync(CategoryCreateDto dto);
+        Task<AccountDto> GetCurrentAccount();
+
     }
 }

@@ -40,6 +40,8 @@ namespace ShoppingMate.Service.Service.Concrete
         public async Task<CustomResponse<AccountDto>> AddCustomerAsync(AccountCreateDto dto)
         {
             var newEntity = _mapper.Map<Account>(dto);
+            var currentAccount = GetCurrentAccount();
+            newEntity.CreatedBy = currentAccount.Result.Email;
             newEntity.RoleId = 2;
             await _accountRepository.AddAsync(newEntity);
             await _unitOfWork.CommitAsync();
@@ -52,6 +54,8 @@ namespace ShoppingMate.Service.Service.Concrete
         public async Task<CustomResponse<AccountDto>> AddAdminAsync(AccountCreateDto dto)
         {
             var newEntity = _mapper.Map<Account>(dto);
+            var currentAccount = GetCurrentAccount();
+            newEntity.CreatedBy = currentAccount.Result.Email;
             newEntity.RoleId = 1;
             await _accountRepository.AddAsync(newEntity);
             await _unitOfWork.CommitAsync();

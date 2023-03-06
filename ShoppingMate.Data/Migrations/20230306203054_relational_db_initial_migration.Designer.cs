@@ -12,8 +12,8 @@ using ShoppingMate.Data.Context;
 namespace ShoppingMate.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230306071444_refresh_token_for_account_migration")]
-    partial class refresh_token_for_account_migration
+    [Migration("20230306203054_relational_db_initial_migration")]
+    partial class relational_db_initial_migration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -107,28 +107,28 @@ namespace ShoppingMate.Data.Migrations
                         new
                         {
                             Id = 1,
-                            CreateDate = new DateTime(2023, 3, 6, 10, 14, 44, 834, DateTimeKind.Local).AddTicks(1796),
+                            CreateDate = new DateTime(2023, 3, 6, 23, 30, 53, 981, DateTimeKind.Local).AddTicks(5495),
                             IsActive = true,
                             Name = "Clothes"
                         },
                         new
                         {
                             Id = 2,
-                            CreateDate = new DateTime(2023, 3, 6, 10, 14, 44, 834, DateTimeKind.Local).AddTicks(1806),
+                            CreateDate = new DateTime(2023, 3, 6, 23, 30, 53, 981, DateTimeKind.Local).AddTicks(5507),
                             IsActive = true,
                             Name = "Household Appliances"
                         },
                         new
                         {
                             Id = 3,
-                            CreateDate = new DateTime(2023, 3, 6, 10, 14, 44, 834, DateTimeKind.Local).AddTicks(1807),
+                            CreateDate = new DateTime(2023, 3, 6, 23, 30, 53, 981, DateTimeKind.Local).AddTicks(5509),
                             IsActive = true,
                             Name = "Food"
                         },
                         new
                         {
                             Id = 4,
-                            CreateDate = new DateTime(2023, 3, 6, 10, 14, 44, 834, DateTimeKind.Local).AddTicks(1808),
+                            CreateDate = new DateTime(2023, 3, 6, 23, 30, 53, 981, DateTimeKind.Local).AddTicks(5509),
                             IsActive = true,
                             Name = "Furniture"
                         });
@@ -160,6 +160,9 @@ namespace ShoppingMate.Data.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<int>("ShoppingListId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("datetime2");
 
@@ -167,183 +170,171 @@ namespace ShoppingMate.Data.Migrations
 
                     b.HasIndex("ProductId");
 
+                    b.HasIndex("ShoppingListId");
+
                     b.ToTable("Items");
 
                     b.HasData(
                         new
                         {
                             Id = 1,
-                            CreateDate = new DateTime(2023, 3, 6, 10, 14, 44, 834, DateTimeKind.Local).AddTicks(3025),
+                            CreateDate = new DateTime(2023, 3, 6, 23, 30, 53, 981, DateTimeKind.Local).AddTicks(6961),
                             IsActive = true,
                             IsBought = false,
                             ProductId = 1,
-                            Quantity = 3
+                            Quantity = 3,
+                            ShoppingListId = 1
                         },
                         new
                         {
                             Id = 2,
-                            CreateDate = new DateTime(2023, 3, 6, 10, 14, 44, 834, DateTimeKind.Local).AddTicks(3029),
+                            CreateDate = new DateTime(2023, 3, 6, 23, 30, 53, 981, DateTimeKind.Local).AddTicks(6968),
                             IsActive = true,
                             IsBought = false,
                             ProductId = 2,
-                            Quantity = 1
+                            Quantity = 1,
+                            ShoppingListId = 1
                         },
                         new
                         {
                             Id = 3,
-                            CreateDate = new DateTime(2023, 3, 6, 10, 14, 44, 834, DateTimeKind.Local).AddTicks(3031),
+                            CreateDate = new DateTime(2023, 3, 6, 23, 30, 53, 981, DateTimeKind.Local).AddTicks(6969),
                             IsActive = true,
                             IsBought = false,
                             ProductId = 3,
-                            Quantity = 5
+                            Quantity = 5,
+                            ShoppingListId = 1
                         },
                         new
                         {
                             Id = 4,
-                            CreateDate = new DateTime(2023, 3, 6, 10, 14, 44, 834, DateTimeKind.Local).AddTicks(3031),
+                            CreateDate = new DateTime(2023, 3, 6, 23, 30, 53, 981, DateTimeKind.Local).AddTicks(6971),
                             IsActive = true,
                             IsBought = false,
                             ProductId = 4,
-                            Quantity = 2
+                            Quantity = 2,
+                            ShoppingListId = 1
                         },
                         new
                         {
                             Id = 5,
-                            CreateDate = new DateTime(2023, 3, 6, 10, 14, 44, 834, DateTimeKind.Local).AddTicks(3032),
+                            CreateDate = new DateTime(2023, 3, 6, 23, 30, 53, 981, DateTimeKind.Local).AddTicks(6972),
                             IsActive = true,
                             IsBought = false,
                             ProductId = 5,
-                            Quantity = 1
+                            Quantity = 1,
+                            ShoppingListId = 2
                         },
                         new
                         {
                             Id = 6,
-                            CreateDate = new DateTime(2023, 3, 6, 10, 14, 44, 834, DateTimeKind.Local).AddTicks(3033),
+                            CreateDate = new DateTime(2023, 3, 6, 23, 30, 53, 981, DateTimeKind.Local).AddTicks(7006),
                             IsActive = true,
                             IsBought = false,
                             ProductId = 6,
-                            Quantity = 1
+                            Quantity = 1,
+                            ShoppingListId = 2
                         },
                         new
                         {
                             Id = 7,
-                            CreateDate = new DateTime(2023, 3, 6, 10, 14, 44, 834, DateTimeKind.Local).AddTicks(3034),
+                            CreateDate = new DateTime(2023, 3, 6, 23, 30, 53, 981, DateTimeKind.Local).AddTicks(7008),
                             IsActive = true,
                             IsBought = false,
                             ProductId = 7,
-                            Quantity = 2
+                            Quantity = 2,
+                            ShoppingListId = 2
                         },
                         new
                         {
                             Id = 8,
-                            CreateDate = new DateTime(2023, 3, 6, 10, 14, 44, 834, DateTimeKind.Local).AddTicks(3035),
+                            CreateDate = new DateTime(2023, 3, 6, 23, 30, 53, 981, DateTimeKind.Local).AddTicks(7009),
                             IsActive = true,
                             IsBought = false,
                             ProductId = 8,
-                            Quantity = 1
+                            Quantity = 1,
+                            ShoppingListId = 1
                         },
                         new
                         {
                             Id = 9,
-                            CreateDate = new DateTime(2023, 3, 6, 10, 14, 44, 834, DateTimeKind.Local).AddTicks(3036),
+                            CreateDate = new DateTime(2023, 3, 6, 23, 30, 53, 981, DateTimeKind.Local).AddTicks(7010),
                             IsActive = true,
                             IsBought = false,
                             ProductId = 9,
-                            Quantity = 10
+                            Quantity = 10,
+                            ShoppingListId = 3
                         },
                         new
                         {
                             Id = 10,
-                            CreateDate = new DateTime(2023, 3, 6, 10, 14, 44, 834, DateTimeKind.Local).AddTicks(3037),
+                            CreateDate = new DateTime(2023, 3, 6, 23, 30, 53, 981, DateTimeKind.Local).AddTicks(7011),
                             IsActive = true,
                             IsBought = false,
                             ProductId = 10,
-                            Quantity = 2
+                            Quantity = 2,
+                            ShoppingListId = 3
                         },
                         new
                         {
                             Id = 11,
-                            CreateDate = new DateTime(2023, 3, 6, 10, 14, 44, 834, DateTimeKind.Local).AddTicks(3038),
+                            CreateDate = new DateTime(2023, 3, 6, 23, 30, 53, 981, DateTimeKind.Local).AddTicks(7012),
                             IsActive = true,
                             IsBought = false,
                             ProductId = 11,
-                            Quantity = 5
+                            Quantity = 5,
+                            ShoppingListId = 3
                         },
                         new
                         {
                             Id = 12,
-                            CreateDate = new DateTime(2023, 3, 6, 10, 14, 44, 834, DateTimeKind.Local).AddTicks(3038),
+                            CreateDate = new DateTime(2023, 3, 6, 23, 30, 53, 981, DateTimeKind.Local).AddTicks(7013),
                             IsActive = true,
                             IsBought = false,
                             ProductId = 12,
-                            Quantity = 3
+                            Quantity = 3,
+                            ShoppingListId = 3
                         },
                         new
                         {
                             Id = 13,
-                            CreateDate = new DateTime(2023, 3, 6, 10, 14, 44, 834, DateTimeKind.Local).AddTicks(3039),
+                            CreateDate = new DateTime(2023, 3, 6, 23, 30, 53, 981, DateTimeKind.Local).AddTicks(7014),
                             IsActive = true,
                             IsBought = false,
                             ProductId = 13,
-                            Quantity = 4
+                            Quantity = 4,
+                            ShoppingListId = 4
                         },
                         new
                         {
                             Id = 14,
-                            CreateDate = new DateTime(2023, 3, 6, 10, 14, 44, 834, DateTimeKind.Local).AddTicks(3040),
+                            CreateDate = new DateTime(2023, 3, 6, 23, 30, 53, 981, DateTimeKind.Local).AddTicks(7015),
                             IsActive = true,
                             IsBought = false,
                             ProductId = 14,
-                            Quantity = 1
+                            Quantity = 1,
+                            ShoppingListId = 4
                         },
                         new
                         {
                             Id = 15,
-                            CreateDate = new DateTime(2023, 3, 6, 10, 14, 44, 834, DateTimeKind.Local).AddTicks(3041),
+                            CreateDate = new DateTime(2023, 3, 6, 23, 30, 53, 981, DateTimeKind.Local).AddTicks(7016),
                             IsActive = true,
                             IsBought = false,
                             ProductId = 15,
-                            Quantity = 2
+                            Quantity = 2,
+                            ShoppingListId = 4
                         },
                         new
                         {
                             Id = 16,
-                            CreateDate = new DateTime(2023, 3, 6, 10, 14, 44, 834, DateTimeKind.Local).AddTicks(3042),
+                            CreateDate = new DateTime(2023, 3, 6, 23, 30, 53, 981, DateTimeKind.Local).AddTicks(7017),
                             IsActive = true,
                             IsBought = false,
                             ProductId = 16,
-                            Quantity = 5
+                            Quantity = 5,
+                            ShoppingListId = 4
                         });
-                });
-
-            modelBuilder.Entity("ShoppingMate.Core.Model.Concrete.ItemShoppingListJoint", b =>
-                {
-                    b.Property<int>("ItemId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ShoppingListId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("UpdateDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("ItemId", "ShoppingListId");
-
-                    b.HasIndex("ShoppingListId");
-
-                    b.ToTable("ItemShoppingListJoint");
                 });
 
             modelBuilder.Entity("ShoppingMate.Core.Model.Concrete.Product", b =>
@@ -393,7 +384,7 @@ namespace ShoppingMate.Data.Migrations
                         {
                             Id = 1,
                             CategoryId = 1,
-                            CreateDate = new DateTime(2023, 3, 6, 10, 14, 44, 834, DateTimeKind.Local).AddTicks(4049),
+                            CreateDate = new DateTime(2023, 3, 6, 23, 30, 53, 982, DateTimeKind.Local).AddTicks(5946),
                             IsActive = true,
                             Name = "Blue Jean",
                             Price = 80m,
@@ -404,7 +395,7 @@ namespace ShoppingMate.Data.Migrations
                         {
                             Id = 2,
                             CategoryId = 1,
-                            CreateDate = new DateTime(2023, 3, 6, 10, 14, 44, 834, DateTimeKind.Local).AddTicks(4052),
+                            CreateDate = new DateTime(2023, 3, 6, 23, 30, 53, 982, DateTimeKind.Local).AddTicks(5950),
                             IsActive = true,
                             Name = "Leather Jacket",
                             Price = 150m,
@@ -415,7 +406,7 @@ namespace ShoppingMate.Data.Migrations
                         {
                             Id = 3,
                             CategoryId = 1,
-                            CreateDate = new DateTime(2023, 3, 6, 10, 14, 44, 834, DateTimeKind.Local).AddTicks(4053),
+                            CreateDate = new DateTime(2023, 3, 6, 23, 30, 53, 982, DateTimeKind.Local).AddTicks(5952),
                             IsActive = true,
                             Name = "Sweetshirt",
                             Price = 60m,
@@ -426,7 +417,7 @@ namespace ShoppingMate.Data.Migrations
                         {
                             Id = 4,
                             CategoryId = 1,
-                            CreateDate = new DateTime(2023, 3, 6, 10, 14, 44, 834, DateTimeKind.Local).AddTicks(4055),
+                            CreateDate = new DateTime(2023, 3, 6, 23, 30, 53, 982, DateTimeKind.Local).AddTicks(5953),
                             IsActive = true,
                             Name = "Dress",
                             Price = 200m,
@@ -437,7 +428,7 @@ namespace ShoppingMate.Data.Migrations
                         {
                             Id = 5,
                             CategoryId = 2,
-                            CreateDate = new DateTime(2023, 3, 6, 10, 14, 44, 834, DateTimeKind.Local).AddTicks(4056),
+                            CreateDate = new DateTime(2023, 3, 6, 23, 30, 53, 982, DateTimeKind.Local).AddTicks(5954),
                             IsActive = true,
                             Name = "Washing Machine",
                             Price = 500m,
@@ -448,7 +439,7 @@ namespace ShoppingMate.Data.Migrations
                         {
                             Id = 6,
                             CategoryId = 2,
-                            CreateDate = new DateTime(2023, 3, 6, 10, 14, 44, 834, DateTimeKind.Local).AddTicks(4057),
+                            CreateDate = new DateTime(2023, 3, 6, 23, 30, 53, 982, DateTimeKind.Local).AddTicks(5956),
                             IsActive = true,
                             Name = "Vacuum Cleaner",
                             Price = 70m,
@@ -459,7 +450,7 @@ namespace ShoppingMate.Data.Migrations
                         {
                             Id = 7,
                             CategoryId = 2,
-                            CreateDate = new DateTime(2023, 3, 6, 10, 14, 44, 834, DateTimeKind.Local).AddTicks(4059),
+                            CreateDate = new DateTime(2023, 3, 6, 23, 30, 53, 982, DateTimeKind.Local).AddTicks(5957),
                             IsActive = true,
                             Name = "Television",
                             Price = 400m,
@@ -470,7 +461,7 @@ namespace ShoppingMate.Data.Migrations
                         {
                             Id = 8,
                             CategoryId = 2,
-                            CreateDate = new DateTime(2023, 3, 6, 10, 14, 44, 834, DateTimeKind.Local).AddTicks(4060),
+                            CreateDate = new DateTime(2023, 3, 6, 23, 30, 53, 982, DateTimeKind.Local).AddTicks(5958),
                             IsActive = true,
                             Name = "Refrigerator",
                             Price = 650m,
@@ -481,7 +472,7 @@ namespace ShoppingMate.Data.Migrations
                         {
                             Id = 9,
                             CategoryId = 3,
-                            CreateDate = new DateTime(2023, 3, 6, 10, 14, 44, 834, DateTimeKind.Local).AddTicks(4061),
+                            CreateDate = new DateTime(2023, 3, 6, 23, 30, 53, 982, DateTimeKind.Local).AddTicks(5959),
                             IsActive = true,
                             Name = "Pasta",
                             Price = 3m,
@@ -492,7 +483,7 @@ namespace ShoppingMate.Data.Migrations
                         {
                             Id = 10,
                             CategoryId = 3,
-                            CreateDate = new DateTime(2023, 3, 6, 10, 14, 44, 834, DateTimeKind.Local).AddTicks(4062),
+                            CreateDate = new DateTime(2023, 3, 6, 23, 30, 53, 982, DateTimeKind.Local).AddTicks(5961),
                             IsActive = true,
                             Name = "Oil",
                             Price = 8m,
@@ -503,7 +494,7 @@ namespace ShoppingMate.Data.Migrations
                         {
                             Id = 11,
                             CategoryId = 3,
-                            CreateDate = new DateTime(2023, 3, 6, 10, 14, 44, 834, DateTimeKind.Local).AddTicks(4063),
+                            CreateDate = new DateTime(2023, 3, 6, 23, 30, 53, 982, DateTimeKind.Local).AddTicks(5962),
                             IsActive = true,
                             Name = "Milk",
                             Price = 5m,
@@ -514,7 +505,7 @@ namespace ShoppingMate.Data.Migrations
                         {
                             Id = 12,
                             CategoryId = 3,
-                            CreateDate = new DateTime(2023, 3, 6, 10, 14, 44, 834, DateTimeKind.Local).AddTicks(4065),
+                            CreateDate = new DateTime(2023, 3, 6, 23, 30, 53, 982, DateTimeKind.Local).AddTicks(5964),
                             IsActive = true,
                             Name = "Bread",
                             Price = 1m,
@@ -525,7 +516,7 @@ namespace ShoppingMate.Data.Migrations
                         {
                             Id = 13,
                             CategoryId = 4,
-                            CreateDate = new DateTime(2023, 3, 6, 10, 14, 44, 834, DateTimeKind.Local).AddTicks(4066),
+                            CreateDate = new DateTime(2023, 3, 6, 23, 30, 53, 982, DateTimeKind.Local).AddTicks(5966),
                             IsActive = true,
                             Name = "Chair",
                             Price = 20m,
@@ -536,7 +527,7 @@ namespace ShoppingMate.Data.Migrations
                         {
                             Id = 14,
                             CategoryId = 4,
-                            CreateDate = new DateTime(2023, 3, 6, 10, 14, 44, 834, DateTimeKind.Local).AddTicks(4068),
+                            CreateDate = new DateTime(2023, 3, 6, 23, 30, 53, 982, DateTimeKind.Local).AddTicks(5967),
                             IsActive = true,
                             Name = "Commode",
                             Price = 30m,
@@ -547,7 +538,7 @@ namespace ShoppingMate.Data.Migrations
                         {
                             Id = 15,
                             CategoryId = 4,
-                            CreateDate = new DateTime(2023, 3, 6, 10, 14, 44, 834, DateTimeKind.Local).AddTicks(4069),
+                            CreateDate = new DateTime(2023, 3, 6, 23, 30, 53, 982, DateTimeKind.Local).AddTicks(5968),
                             IsActive = true,
                             Name = "Seat",
                             Price = 50m,
@@ -558,7 +549,7 @@ namespace ShoppingMate.Data.Migrations
                         {
                             Id = 16,
                             CategoryId = 4,
-                            CreateDate = new DateTime(2023, 3, 6, 10, 14, 44, 834, DateTimeKind.Local).AddTicks(4070),
+                            CreateDate = new DateTime(2023, 3, 6, 23, 30, 53, 982, DateTimeKind.Local).AddTicks(5969),
                             IsActive = true,
                             Name = "Lampshade",
                             Price = 15m,
@@ -621,7 +612,13 @@ namespace ShoppingMate.Data.Migrations
                     b.Property<bool>("IsCompleted")
                         .HasColumnType("bit");
 
+                    b.Property<string>("ListDescription")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("TotalCost")
@@ -641,7 +638,7 @@ namespace ShoppingMate.Data.Migrations
                         {
                             Id = 1,
                             CategoryId = 1,
-                            CreateDate = new DateTime(2023, 3, 6, 10, 14, 44, 834, DateTimeKind.Local).AddTicks(5074),
+                            CreateDate = new DateTime(2023, 3, 6, 23, 30, 53, 982, DateTimeKind.Local).AddTicks(7138),
                             IsActive = true,
                             IsCompleted = false,
                             Name = "Clothes List",
@@ -651,7 +648,7 @@ namespace ShoppingMate.Data.Migrations
                         {
                             Id = 2,
                             CategoryId = 2,
-                            CreateDate = new DateTime(2023, 3, 6, 10, 14, 44, 834, DateTimeKind.Local).AddTicks(5077),
+                            CreateDate = new DateTime(2023, 3, 6, 23, 30, 53, 982, DateTimeKind.Local).AddTicks(7190),
                             IsActive = true,
                             IsCompleted = false,
                             Name = "Household Appliances List",
@@ -661,7 +658,7 @@ namespace ShoppingMate.Data.Migrations
                         {
                             Id = 3,
                             CategoryId = 3,
-                            CreateDate = new DateTime(2023, 3, 6, 10, 14, 44, 834, DateTimeKind.Local).AddTicks(5078),
+                            CreateDate = new DateTime(2023, 3, 6, 23, 30, 53, 982, DateTimeKind.Local).AddTicks(7192),
                             IsActive = true,
                             IsCompleted = false,
                             Name = "Foods List",
@@ -671,7 +668,7 @@ namespace ShoppingMate.Data.Migrations
                         {
                             Id = 4,
                             CategoryId = 4,
-                            CreateDate = new DateTime(2023, 3, 6, 10, 14, 44, 834, DateTimeKind.Local).AddTicks(5079),
+                            CreateDate = new DateTime(2023, 3, 6, 23, 30, 53, 982, DateTimeKind.Local).AddTicks(7192),
                             IsActive = true,
                             IsCompleted = false,
                             Name = "Furnitures List",
@@ -698,24 +695,13 @@ namespace ShoppingMate.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("ShoppingMate.Core.Model.Concrete.ItemShoppingListJoint", b =>
-                {
-                    b.HasOne("ShoppingMate.Core.Model.Concrete.Item", "Item")
-                        .WithMany("ShoppingLists")
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("ShoppingMate.Core.Model.Concrete.ShoppingList", "ShoppingList")
                         .WithMany("Items")
                         .HasForeignKey("ShoppingListId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Item");
+                    b.Navigation("Product");
 
                     b.Navigation("ShoppingList");
                 });
@@ -745,11 +731,6 @@ namespace ShoppingMate.Data.Migrations
             modelBuilder.Entity("ShoppingMate.Core.Model.Concrete.Category", b =>
                 {
                     b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("ShoppingMate.Core.Model.Concrete.Item", b =>
-                {
-                    b.Navigation("ShoppingLists");
                 });
 
             modelBuilder.Entity("ShoppingMate.Core.Model.Concrete.Role", b =>
