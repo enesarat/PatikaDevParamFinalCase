@@ -29,7 +29,7 @@ namespace ShoppingMate.API.Modules
             var repoAssembly = Assembly.GetAssembly(typeof(ApplicationDbContext));
             var serviceAssembly = Assembly.GetAssembly(typeof(MappingProfile));
 
-            builder.RegisterAssemblyTypes(apiAssembly, repoAssembly, serviceAssembly).Where(x => x.Name.EndsWith("Repository")).AsImplementedInterfaces().InstancePerLifetimeScope();
+            //builder.RegisterAssemblyTypes(apiAssembly, repoAssembly, serviceAssembly).Where(x => x.Name.EndsWith("Repository")).AsImplementedInterfaces().InstancePerLifetimeScope();
 
 
             builder.RegisterAssemblyTypes(apiAssembly, repoAssembly, serviceAssembly).Where(x => x.Name.EndsWith("Service")).AsImplementedInterfaces().InstancePerLifetimeScope();

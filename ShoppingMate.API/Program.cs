@@ -22,6 +22,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using StackExchange.Redis;
+using ShoppingMate.Caching.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -80,29 +82,6 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options => {
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
-                        ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true,
-                        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-                        ValidAudience = builder.Configuration["Jwt:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
-                    };
-                });
-
-
-builder.Services.AddScoped(typeof(NotFoundFilter<,>));
-
-builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
-builder.Services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
-builder.Services.AddScoped(typeof(IGenericService<,>), typeof(GenericService<,>));
-
-builder.Services.AddAutoMapper(typeof(MappingProfile));
-
 builder.Services.AddDbContext<ApplicationDbContext>(x =>
 {
     x.UseSqlServer(builder.Configuration.GetConnectionString("MsSql_ShoppingMate_DB"), option =>
@@ -111,9 +90,72 @@ builder.Services.AddDbContext<ApplicationDbContext>(x =>
     });
 });
 
-builder.Host.UseServiceProviderFactory
-    (new AutofacServiceProviderFactory());
-builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder => containerBuilder.RegisterModule(new RepositoryAndServiceModule()));
+builder.Services.AddSingleton<RedisRepository>(sp =>
+{
+    return new RedisRepository(url: builder.Configuration[key: "CacheOptions:Url"]);
+});
+
+builder.Services.AddSingleton<IDatabase>(sp =>
+{
+    var redisService = sp.GetRequiredService<RedisRepository>();
+    return redisService.GetDatabase(0);
+});
+
+
+//builder.Host.UseServiceProviderFactory
+//    (new AutofacServiceProviderFactory());
+//builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder => containerBuilder.RegisterModule(new RepositoryAndServiceModule()));
+
+builder.Services.AddScoped(typeof(IAccountService), typeof(AccountService));
+builder.Services.AddScoped(typeof(ICategoryService), typeof(CategoryService));
+builder.Services.AddScoped(typeof(IItemService), typeof(ItemService));
+builder.Services.AddScoped(typeof(IRoleService), typeof(RoleService));
+builder.Services.AddScoped(typeof(IShoppingListService), typeof(ShoppingListService));
+builder.Services.AddScoped(typeof(IProductService), typeof(ProductService));
+builder.Services.AddScoped<IProductRepository>(sp =>
+{
+    var appDbContext = sp.GetService<ApplicationDbContext>();
+    var productRepository = new ProductRepository(appDbContext);
+    var redisRepository = sp.GetRequiredService<RedisRepository>();
+    return new ProductCachedRepository(productRepository, redisRepository);
+});
+
+builder.Services.AddScoped(typeof(IAccountRepository), typeof(AccountRepository));
+builder.Services.AddScoped(typeof(ICategoryRepository), typeof(CategoryRepository));
+builder.Services.AddScoped(typeof(IItemRepository), typeof(ItemRepository));
+builder.Services.AddScoped(typeof(IRoleRepository), typeof(RoleRepository));
+builder.Services.AddScoped(typeof(IShoppingListRepository), typeof(ShoppingListRepository));
+
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options => {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+        };
+    });
+
+
+builder.Services.AddScoped(typeof(NotFoundFilter<,>));
+
+builder.Services.AddScoped<IUnitOfWork,UnitOfWork>();
+builder.Services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
+builder.Services.AddScoped(typeof(IGenericService<,>), typeof(GenericService<,>));
+
+
+
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+
+
+
+
 
 var app = builder.Build();
 

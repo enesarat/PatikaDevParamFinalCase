@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ShoppingMate.Caching\ShoppingMate.Caching.csproj" />
     <ProjectReference Include="..\ShoppingMate.Data\ShoppingMate.Data.csproj" />
     <ProjectReference Include="..\ShoppingMate.Service\ShoppingMate.Service.csproj" />
   </ItemGroup>
